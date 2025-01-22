@@ -18,7 +18,7 @@ const Button = ({
     elevation: 4,
   };
 
-  if (loading) return <Spinner size="large" color="" />;
+  if (loading) return <Spinner />;
 
   return (
     <Pressable
