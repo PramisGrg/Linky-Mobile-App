@@ -27,6 +27,7 @@ const Input = ({
         name={name}
         render={({ field: { onChange, value } }) => (
           <TextInput
+            autoCapitalize={"none"}
             secureTextEntry={secure}
             placeholder={placeholder}
             onChangeText={onChange}

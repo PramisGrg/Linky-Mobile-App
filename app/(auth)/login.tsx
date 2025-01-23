@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
+import React, { useState } from "react";
 import ScreenWrapper from "@/layout/screen-wrapper";
 import BackButton from "@/components/ui/back-button";
 import { hp } from "@/helpers/dimensions";
@@ -9,12 +9,21 @@ import Input from "@/components/ui/input";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useForm } from "react-hook-form";
+import { LoginType } from "@/types";
+import { router } from "expo-router";
+import { supabase } from "@/lib/supabase";
 
 const Login = () => {
-  const { control, handleSubmit, reset } = useForm();
+  const { control, handleSubmit, reset } = useForm<LoginType>();
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = (values) => {
-    console.log(values, "I am clicked");
+  const onSubmit = async (values: LoginType) => {
+    setLoading(true);
+    const { data, error } = await supabase.auth.signInWithPassword(values);
+
+    if (error) Alert.alert(error.message);
+    console.log(data, "This is login data");
+    setLoading(false);
   };
   return (
     <ScreenWrapper bg="white">
@@ -49,7 +58,18 @@ const Login = () => {
           />
         </View>
 
-        <Button onPress={handleSubmit(onSubmit)} title="Login" />
+        <Button
+          loading={loading}
+          onPress={handleSubmit(onSubmit)}
+          title="Login"
+        />
+
+        <View style={styles.registerContainer}>
+          <Text style={styles.registerText}>Don't have an account ?</Text>
+          <Pressable onPress={() => router.push("/(auth)/register")}>
+            <Text style={styles.registerButtonText}>Register</Text>
+          </Pressable>
+        </View>
       </View>
     </ScreenWrapper>
   );
@@ -74,5 +94,20 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     gap: 30,
+  },
+  registerContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 6,
+  },
+  registerText: {
+    fontSize: hp(1.7),
+    fontWeight: 600,
+    color: theme.colors.textLight,
+  },
+  registerButtonText: {
+    color: theme.colors.primary,
+    fontWeight: 700,
   },
 });
