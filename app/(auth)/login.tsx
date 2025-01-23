@@ -22,7 +22,6 @@ const Login = () => {
     const { data, error } = await supabase.auth.signInWithPassword(values);
 
     if (error) Alert.alert(error.message);
-    console.log(data, "This is login data");
     setLoading(false);
   };
   return (
