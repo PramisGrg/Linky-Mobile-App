@@ -1,5 +1,6 @@
 import { AuthProvider, useAuth } from "@/context/auth-context";
 import { supabase } from "@/lib/supabase";
+import { getUserData } from "@/services/user-services";
 import { router, Stack } from "expo-router";
 import { useEffect } from "react";
 
@@ -19,6 +20,7 @@ function MainLayout() {
       if (session) {
         //set auth and move to home screen
         setAuth(session?.user);
+        updateUserData(session?.user);
         router.replace("/(main)/home");
       } else {
         //set auth null and move to index screen
@@ -27,6 +29,12 @@ function MainLayout() {
       }
     });
   }, []);
+
+  const updateUserData = async (user: any) => {
+    const response = await getUserData(user?.id);
+    console.log(response, "This is user");
+  };
+
   return (
     <Stack
       screenOptions={{
