@@ -24,19 +24,24 @@ import { updateUser } from "@/services/user-services";
 import { useAuth } from "@/context/auth-context";
 import { router } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
+import { uploadFile } from "@/services/image-service";
 
 const ProfileEdit = () => {
   const { user, setUserData } = useAuth();
   const { control, handleSubmit } = useForm<UpdateProfileType>();
   const [loading, setLoading] = useState(false);
+  const [imageUri, setImageUri] = useState("");
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images", "videos"],
+      mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.7,
     });
+    if (!result.canceled && result.assets && result.assets[0].uri) {
+      setImageUri(result.assets[0].uri);
+    }
   };
 
   const onSubmit = async (values: UpdateProfileType) => {
@@ -46,11 +51,21 @@ const ProfileEdit = () => {
       Alert.alert("Please fill the form");
     }
     setLoading(true);
-    const response = await updateUser(user?.data.id, values);
+    //upload image
+    const imageRes = await uploadFile("profiles", imageUri, true);
+    if (imageRes.success) {
+      console.log(imageRes.data);
+      user.data.image = imageRes.data;
+    } else {
+      user.data.image = null;
+    }
+
+    const requiredValue = { ...values, image: user.data.image };
+    const response = await updateUser(user?.data.id, requiredValue);
     setLoading(false);
 
     if (response.success) {
-      //managing format of data
+      //   //managing format of data
       const mergedUserData = {
         ...user,
         data: {
@@ -74,7 +89,12 @@ const ProfileEdit = () => {
         </View>
 
         <View style={styles.profileImage}>
-          <Avatar height={130} width={130} borderRadius={40} />
+          <Avatar
+            uri={user.data.image || undefined}
+            height={130}
+            width={130}
+            borderRadius={40}
+          />
           <Pressable onPress={pickImage}>
             <View style={styles.editIcons}>
               <AntDesign name="camerao" size={24} color="black" />
@@ -173,7 +193,7 @@ const styles = StyleSheet.create({
   },
   editIcons: {
     position: "absolute",
-    right: "30%",
+    right: -10,
     bottom: 12,
     backgroundColor: theme.colors.darkLight,
     borderRadius: theme.radius.sm,

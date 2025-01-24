@@ -16,6 +16,12 @@ const Avatar = ({
   const blurhash =
     "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
+  const getFileUri = (uri: string) => {
+    if (uri) {
+      return `https://aowaaheuovghsrpbhkqk.supabase.co/storage/v1/object/public/uploads/${uri}`;
+    } else return null;
+  };
+
   return (
     <Image
       style={{
@@ -23,7 +29,11 @@ const Avatar = ({
         width,
         borderRadius,
       }}
-      source={uri ? { uri } : require("../../assets/images/avatar.jpeg")}
+      source={
+        uri
+          ? { uri: getFileUri(uri) }
+          : require("../../assets/images/avatar.jpeg")
+      }
       contentFit="cover"
       transition={1000}
       placeholder={{ blurhash }}

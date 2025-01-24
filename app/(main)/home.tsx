@@ -7,8 +7,10 @@ import { theme } from "@/constants/theme";
 import { router } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import Avatar from "@/components/ui/avatar";
+import { useAuth } from "@/context/auth-context";
 
 const Home = () => {
+  const { user } = useAuth();
   const onLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -28,7 +30,12 @@ const Home = () => {
             <AntDesign name="plussquareo" size={26} color={theme.colors.text} />
           </Pressable>
           <Pressable onPress={() => router.push("/(main)/profile")}>
-            <Avatar height={40} width={40} borderRadius={20} />
+            <Avatar
+              uri={user.data.image}
+              height={40}
+              width={40}
+              borderRadius={20}
+            />
           </Pressable>
         </View>
       </View>

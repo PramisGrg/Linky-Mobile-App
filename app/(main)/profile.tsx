@@ -16,6 +16,8 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 const Profile = () => {
   const { user } = useAuth();
 
+  console.log(user, "This is user");
+
   const onLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -35,7 +37,12 @@ const Profile = () => {
 
         <View style={styles.profileImage}>
           <Pressable onPress={() => router.push("/(main)/profile-edit")}>
-            <Avatar height={130} width={130} borderRadius={40} />
+            <Avatar
+              uri={user.data.image}
+              height={130}
+              width={130}
+              borderRadius={40}
+            />
             <View style={styles.editIcons}>
               <AntDesign name="edit" size={24} color="gray" />
             </View>
