@@ -13,7 +13,7 @@ export default function RootLayout() {
 }
 
 function MainLayout() {
-  const { setAuth } = useAuth();
+  const { setAuth, setUserData } = useAuth();
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event, session) => {
@@ -32,7 +32,7 @@ function MainLayout() {
 
   const updateUserData = async (user: any) => {
     const response = await getUserData(user?.id);
-    console.log(response, "This is user");
+    setUserData(response);
   };
 
   return (

@@ -21,10 +21,19 @@ const Register = () => {
   const onSubmit = async (values: RegisterType) => {
     setLoading(true);
 
+    const result = {
+      email: values.email,
+      password: values.password,
+      options: {
+        data: {
+          name: values.name,
+        },
+      },
+    };
     const {
       data: { session },
       error,
-    } = await supabase.auth.signUp(values);
+    } = await supabase.auth.signUp(result);
 
     setLoading(false);
     if (error) Alert.alert(error.message);
