@@ -49,7 +49,13 @@ const Profile = () => {
           </Pressable>
         </View>
 
-        <Text style={styles.nameText}>{user?.data?.name}</Text>
+        <View style={styles.subCaontainer}>
+          <Text style={styles.nameText}>{user?.data?.name}</Text>
+          <Text style={{ textAlign: "center", color: theme.colors.text }}>
+            {user?.data?.bio}
+          </Text>
+        </View>
+
         {/*Information Section*/}
         <View style={styles.infoContainer}>
           <View style={styles.infoSubContainer}>
@@ -84,6 +90,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
     gap: 30,
+  },
+  subCaontainer: {
+    flexDirection: "column",
+    justifyContent: "center",
   },
   header: {
     flexDirection: "row",
