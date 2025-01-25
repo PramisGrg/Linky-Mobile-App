@@ -19,11 +19,13 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import * as ImagePicker from "expo-image-picker";
 import { Image } from "expo-image";
 import Button from "@/components/ui/button";
+import { createOrUpdatePost } from "@/services/post-service";
 
 const Post = () => {
   const { user } = useAuth();
   const [status, setStatus] = useState("");
   const [imageUri, setImageUri] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -37,7 +39,7 @@ const Post = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!status && !imageUri) {
       Alert.alert("Plese fill the fields");
     }
@@ -45,8 +47,18 @@ const Post = () => {
     const value = {
       status,
       imageUri,
+      userId: user?.data?.id,
     };
-    console.log(value);
+    console.log("I am clicked");
+    setLoading(true);
+    const response = await createOrUpdatePost(value);
+    if (response.success) {
+      setImageUri(null);
+      setStatus("");
+    } else {
+      Alert.alert("Could not create post");
+    }
+    setLoading(false);
   };
 
   return (
@@ -104,7 +116,7 @@ const Post = () => {
           </Pressable>
         </View>
 
-        <Button onPress={handleSubmit} title="Post" />
+        <Button loading={loading} onPress={handleSubmit} title="Post" />
       </ScrollView>
     </ScreenWrapper>
   );

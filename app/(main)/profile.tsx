@@ -38,7 +38,7 @@ const Profile = () => {
         <View style={styles.profileImage}>
           <Pressable onPress={() => router.push("/(main)/profile-edit")}>
             <Avatar
-              uri={user.data.image}
+              uri={user?.data?.image || ""}
               height={130}
               width={130}
               borderRadius={40}
