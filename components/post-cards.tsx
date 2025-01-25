@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import React, { useState } from "react";
 import { GetPostsType } from "@/types";
 import { Router } from "expo-router";
 import { theme } from "@/constants/theme";
@@ -8,6 +8,8 @@ import moment from "moment";
 import { hp } from "@/helpers/dimensions";
 import { Image } from "expo-image";
 import { getSupaBaseFileUri } from "@/services/image-service";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 interface PostCardsProps {
   item: GetPostsType;
@@ -20,6 +22,7 @@ const PostCards = ({ item, currentUser, router }: PostCardsProps) => {
   console.log(currentUser);
 
   const createdAt = moment(item.created_at).format("MMM D");
+  const [like, setLike] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -52,6 +55,18 @@ const PostCards = ({ item, currentUser, router }: PostCardsProps) => {
           />
         </View>
       )}
+
+      <View style={styles.likeCommentShare}>
+        <Pressable onPress={() => setLike(true)}>
+          <AntDesign
+            name="like2"
+            size={24}
+            color={like ? theme.colors.rose : theme.colors.textLight}
+          />
+        </Pressable>
+        <FontAwesome5 name="comment" size={24} color={theme.colors.textLight} />
+        <AntDesign name="sharealt" size={24} color={theme.colors.textLight} />
+      </View>
     </View>
   );
 };
@@ -60,7 +75,7 @@ export default PostCards;
 
 const styles = StyleSheet.create({
   container: {
-    gap: 20,
+    gap: 14,
     marginVertical: 10,
     padding: 10,
     borderColor: theme.colors.gray,
@@ -90,5 +105,9 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderRadius: theme.radius.md,
     borderCurve: "continuous",
+  },
+  likeCommentShare: {
+    flexDirection: "row",
+    gap: 20,
   },
 });
