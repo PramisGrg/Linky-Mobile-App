@@ -17,12 +17,26 @@ export interface UpdateProfileType {
   image?: null;
 }
 
-export interface UserType {
-  address: string;
-  bio: string;
-  email: string;
-  id: string;
-  image?: null;
-  name: string;
-  phoneNumber: string;
+// export interface UserType {
+//   address: string;
+//   bio: string;
+//   email: string;
+//   id: string;
+//   image?: null;
+//   name: string;
+//   phoneNumber: string;
+// }
+
+export interface GetPostsType {
+  body: string;
+  created_at: string;
+  file: string;
+  id: number;
+  user: {
+    email: string;
+    id: string;
+    name: string;
+    image: string;
+  };
+  userId: string;
 }

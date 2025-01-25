@@ -37,3 +37,11 @@ export const uploadFile = async (
 const getFilePath = (folderName: string, isImage: boolean) => {
   return `/${folderName}/${new Date().getTime()}${isImage ? ".png" : ".mp4"}`;
 };
+
+export const getSupaBaseFileUri = (fileName: string) => {
+  if (fileName) {
+    return `https://aowaaheuovghsrpbhkqk.supabase.co/storage/v1/object/public/uploads/${fileName}`;
+  } else {
+    return null;
+  }
+};

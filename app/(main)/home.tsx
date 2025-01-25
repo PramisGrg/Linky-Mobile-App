@@ -1,5 +1,13 @@
-import { View, Text, Button, Alert, StyleSheet, Pressable } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  Button,
+  Alert,
+  StyleSheet,
+  Pressable,
+  FlatList,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import ScreenWrapper from "@/layout/screen-wrapper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { wp } from "@/helpers/dimensions";
@@ -8,9 +16,27 @@ import { router } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import Avatar from "@/components/ui/avatar";
 import { useAuth } from "@/context/auth-context";
+import { fetchPosts } from "@/services/post-service";
+import PostCards from "@/components/post-cards";
+import { GetPostsType } from "@/types";
 
 const Home = () => {
   const { user } = useAuth();
+
+  const [posts, setPosts] = useState<GetPostsType[]>([]);
+
+  useEffect(() => {
+    getPosts();
+  }, []);
+
+  const getPosts = async () => {
+    const response = await fetchPosts();
+    console.log("Posts ", response.data);
+    if (response.success) {
+      setPosts(response.data || []);
+    }
+  };
+
   const onLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -39,6 +65,16 @@ const Home = () => {
           </Pressable>
         </View>
       </View>
+
+      <FlatList
+        data={posts}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={styles.listStyles}
+        renderItem={({ item }) => (
+          <PostCards item={item} currentUser={user} router={router} />
+        )}
+      />
       <Button onPress={onLogout} title="logout" />
     </ScreenWrapper>
   );
@@ -62,5 +98,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 14,
     alignItems: "center",
+  },
+  listStyles: {
+    marginHorizontal: wp(4),
+    paddingVertical: 20,
   },
 });

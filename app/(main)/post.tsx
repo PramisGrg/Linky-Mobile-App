@@ -51,12 +51,13 @@ const Post = () => {
     };
     console.log("I am clicked");
     setLoading(true);
+
     const response = await createOrUpdatePost(value);
     if (response.success) {
       setImageUri(null);
       setStatus("");
     } else {
-      Alert.alert("Could not create post");
+      Alert.alert("Post", response?.msg);
     }
     setLoading(false);
   };
