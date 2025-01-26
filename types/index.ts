@@ -40,3 +40,22 @@ export interface GetPostsType {
   };
   userId: string;
 }
+
+export interface CommentType {
+  postId: number;
+  text: string;
+  userId: string;
+}
+
+export interface ShowCommentType {
+  created_at: string;
+  id: number;
+  postId: number;
+  text: string;
+  user: {
+    id: string;
+    image: string;
+    name: string;
+  };
+  userId: string;
+}

@@ -10,7 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import ScreenWrapper from "@/layout/screen-wrapper";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { wp } from "@/helpers/dimensions";
+import { hp, wp } from "@/helpers/dimensions";
 import { theme } from "@/constants/theme";
 import { router } from "expo-router";
 import { supabase } from "@/lib/supabase";
@@ -28,6 +28,7 @@ const Home = () => {
   const { user } = useAuth();
 
   const [posts, setPosts] = useState<GetPostsType[]>([]);
+  const [hasMore, setHasMore] = useState(true);
 
   const handlePostEvent = async (payload: any) => {
     if (payload.eventType == "INSERT" && payload.new.id) {
@@ -54,21 +55,22 @@ const Home = () => {
   }, []);
 
   const getPosts = async () => {
+    if (!hasMore) return null;
     limit = limit + 4;
 
-    console.log("fetching posts", limit);
     const response = await fetchPosts(limit);
     if (response.success) {
+      if (posts.length == response.data?.length) setHasMore(false);
       setPosts(response.data || []);
     }
   };
 
-  const onLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      Alert.alert(error.message);
-    }
-  };
+  //   const onLogout = async () => {
+  //     const { error } = await supabase.auth.signOut();
+  //     if (error) {
+  //       Alert.alert(error.message);
+  //     }
+  //   };
 
   return (
     <ScreenWrapper bg="white">
@@ -101,16 +103,21 @@ const Home = () => {
           <PostCards item={item} currentUser={user} router={router} />
         )}
         onEndReached={() => {
-          console.log("end is reached");
           getPosts();
         }}
         ListFooterComponent={
-          <View style={{ marginVertical: posts.length == 0 ? 200 : 30 }}>
-            <Spinner />
-          </View>
+          hasMore ? (
+            <View style={{ marginVertical: posts.length == 0 ? 200 : 30 }}>
+              <Spinner />
+            </View>
+          ) : (
+            <View style={{ marginVertical: 30 }}>
+              <Text style={styles.noMorePosts}>No more posts</Text>
+            </View>
+          )
         }
       />
-      <Button onPress={onLogout} title="logout" />
+      {/* <Button onPress={onLogout} title="logout" /> */}
     </ScreenWrapper>
   );
 };
@@ -123,6 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginHorizontal: wp(5),
     alignItems: "center",
+    paddingBottom: 20,
   },
   headerText: {
     fontSize: wp(6.5),
@@ -137,5 +145,10 @@ const styles = StyleSheet.create({
   listStyles: {
     marginHorizontal: wp(4),
     paddingVertical: 20,
+  },
+  noMorePosts: {
+    fontSize: hp(1.8),
+    textAlign: "center",
+    fontWeight: 700,
   },
 });

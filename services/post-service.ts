@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { uploadFile } from "./image-service";
-import { GetPostsType } from "@/types";
+import { CommentType, GetPostsType } from "@/types";
 
 interface CreatOrUpdatePostProps {
   imageUri: string | null;
@@ -50,7 +50,8 @@ export const fetchPosts = async (limit = 10) => {
       .from("posts")
       .select(
         `*, 
-       user:  users (id, email, name)`
+       user:  users (id, email, name),
+       comments(count)`
       )
       .order("created_at", { ascending: false })
       .limit(limit);
@@ -62,5 +63,47 @@ export const fetchPosts = async (limit = 10) => {
     return { success: true, data: data as GetPostsType[] };
   } catch (error) {
     return { success: false, msg: "Could not upload image" };
+  }
+};
+
+export const fetchPostDetail = async (postId: number) => {
+  try {
+    //upload posts
+    const { data, error } = await supabase
+      .from("posts")
+      .select(
+        `*, 
+         user:  users (id, email, name),
+         comments (*, user: users(id, name, image)) `
+      )
+      .eq("id", postId)
+      .order("created_at", { ascending: false })
+      .single();
+
+    if (error) {
+      return { success: false, msg: "Could not fetch the posts details" };
+    }
+
+    return { success: true, data: data as GetPostsType[] };
+  } catch (error) {
+    return { success: false, msg: "Could not fetch the posts details" };
+  }
+};
+
+export const createComment = async (comment: CommentType) => {
+  try {
+    const { data, error } = await supabase
+      .from("comments")
+      .insert(comment)
+      .select()
+      .single();
+
+    if (error) {
+      return { success: false, msg: "Could not create comment" };
+    }
+
+    return { success: true, data: data };
+  } catch (error) {
+    return { success: false, msg: "Could not create comment" };
   }
 };

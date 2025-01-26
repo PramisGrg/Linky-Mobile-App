@@ -10,16 +10,31 @@ import { Image } from "expo-image";
 import { getSupaBaseFileUri } from "@/services/image-service";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import PostDetails from "@/app/(main)/post-details";
 
 interface PostCardsProps {
   item: GetPostsType;
   currentUser: any;
   router: Router;
+  showIcons?: boolean;
 }
 
-const PostCards = ({ item, currentUser, router }: PostCardsProps) => {
+const PostCards = ({
+  item,
+  currentUser,
+  router,
+  showIcons = true,
+}: PostCardsProps) => {
   const createdAt = moment(item.created_at).format("MMM D");
   const [like, setLike] = useState(false);
+
+  const openPostDetails = () => {
+    console.log(item.id);
+    router.push({
+      pathname: "/post-details",
+      params: { postId: item?.id },
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -53,17 +68,31 @@ const PostCards = ({ item, currentUser, router }: PostCardsProps) => {
         </View>
       )}
 
-      <View style={styles.likeCommentShare}>
-        <Pressable onPress={() => setLike(true)}>
-          <AntDesign
-            name="like2"
-            size={24}
-            color={like ? theme.colors.rose : theme.colors.textLight}
-          />
-        </Pressable>
-        <FontAwesome5 name="comment" size={24} color={theme.colors.textLight} />
-        <AntDesign name="sharealt" size={24} color={theme.colors.textLight} />
-      </View>
+      {showIcons && (
+        <View style={[styles.likeCommentShare]}>
+          <Pressable onPress={() => setLike(true)}>
+            <AntDesign
+              name="like2"
+              size={24}
+              color={like ? theme.colors.rose : theme.colors.textLight}
+            />
+          </Pressable>
+          <Pressable onPress={openPostDetails}>
+            <FontAwesome5
+              name="comment"
+              size={24}
+              color={theme.colors.textLight}
+            />
+          </Pressable>
+          <Pressable>
+            <AntDesign
+              name="sharealt"
+              size={24}
+              color={theme.colors.textLight}
+            />
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 };
@@ -78,14 +107,6 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.gray,
     borderWidth: 0.5,
     borderRadius: theme.radius.xl,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    elevation: 1,
   },
   header: {
     flexDirection: "row",
