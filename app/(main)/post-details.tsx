@@ -18,6 +18,8 @@ import Feather from "@expo/vector-icons/Feather";
 import { theme } from "@/constants/theme";
 import CommentItem from "@/components/comment-item";
 import { ShowCommentType } from "@/types";
+import { supabase } from "@/lib/supabase";
+import { getUserData } from "@/services/user-services";
 
 const PostDetails = () => {
   const searchParams = useLocalSearchParams();
@@ -30,8 +32,41 @@ const PostDetails = () => {
   const [comment, setComment] = useState("");
   const [sendLoading, setSendLoading] = useState(false);
 
+  const handlePostComment = async (payload: any) => {
+    console.log("Got new comment", payload.new);
+    if (payload.new) {
+      const newComment = { ...payload.new };
+      const response = await getUserData(newComment.userId);
+      newComment.user = response.success ? response.data : {};
+      setPosts((prevPosts: any) => {
+        return {
+          ...prevPosts,
+          comments: [newComment, ...prevPosts.comments],
+        };
+      });
+    }
+  };
+
   useEffect(() => {
+    const commentChannel = supabase
+      .channel("comments")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "comments",
+
+          filter: `postId=eq.${postId}`,
+        },
+        handlePostComment
+      )
+      .subscribe();
+
     getPostDetails();
+    return () => {
+      supabase.removeChannel(commentChannel);
+    };
   }, []);
 
   const getPostDetails = async () => {
