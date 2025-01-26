@@ -18,9 +18,6 @@ interface PostCardsProps {
 }
 
 const PostCards = ({ item, currentUser, router }: PostCardsProps) => {
-  console.log(item);
-  console.log(currentUser);
-
   const createdAt = moment(item.created_at).format("MMM D");
   const [like, setLike] = useState(false);
 

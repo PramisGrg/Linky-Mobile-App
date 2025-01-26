@@ -20,6 +20,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Image } from "expo-image";
 import Button from "@/components/ui/button";
 import { createOrUpdatePost } from "@/services/post-service";
+import { router } from "expo-router";
 
 const Post = () => {
   const { user } = useAuth();
@@ -40,8 +41,8 @@ const Post = () => {
   };
 
   const handleSubmit = async () => {
-    if (!status && !imageUri) {
-      Alert.alert("Plese fill the fields");
+    if (!status || !imageUri) {
+      Alert.alert("Incomplete", "Plese fill the fields");
     }
 
     const value = {
@@ -49,15 +50,15 @@ const Post = () => {
       imageUri,
       userId: user?.data?.id,
     };
-    console.log("I am clicked");
     setLoading(true);
 
     const response = await createOrUpdatePost(value);
     if (response.success) {
       setImageUri(null);
       setStatus("");
+      router.push("/(main)/home");
     } else {
-      Alert.alert("Post", response?.msg);
+      Alert.alert("Posting", response?.msg);
     }
     setLoading(false);
   };

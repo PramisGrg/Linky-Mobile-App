@@ -19,19 +19,45 @@ import { useAuth } from "@/context/auth-context";
 import { fetchPosts } from "@/services/post-service";
 import PostCards from "@/components/post-cards";
 import { GetPostsType } from "@/types";
+import { getUserData } from "@/services/user-services";
+import Spinner from "@/components/ui/spinner";
 
+//for fetching posts
+var limit = 0;
 const Home = () => {
   const { user } = useAuth();
 
   const [posts, setPosts] = useState<GetPostsType[]>([]);
 
+  const handlePostEvent = async (payload: any) => {
+    if (payload.eventType == "INSERT" && payload.new.id) {
+      const newPost = { ...payload.new };
+      const response = await getUserData(newPost.userId);
+      newPost.user = response.success ? response.data : {};
+      setPosts((prevPost) => [newPost, ...prevPost]);
+    }
+  };
+
   useEffect(() => {
-    getPosts();
+    const postChannel = supabase
+      .channel("posts")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "posts" },
+        handlePostEvent
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(postChannel);
+    };
   }, []);
 
   const getPosts = async () => {
-    const response = await fetchPosts();
-    console.log("Posts ", response.data);
+    limit = limit + 4;
+
+    console.log("fetching posts", limit);
+    const response = await fetchPosts(limit);
     if (response.success) {
       setPosts(response.data || []);
     }
@@ -74,6 +100,15 @@ const Home = () => {
         renderItem={({ item }) => (
           <PostCards item={item} currentUser={user} router={router} />
         )}
+        onEndReached={() => {
+          console.log("end is reached");
+          getPosts();
+        }}
+        ListFooterComponent={
+          <View style={{ marginVertical: posts.length == 0 ? 200 : 30 }}>
+            <Spinner />
+          </View>
+        }
       />
       <Button onPress={onLogout} title="logout" />
     </ScreenWrapper>

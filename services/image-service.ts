@@ -26,7 +26,6 @@ export const uploadFile = async (
       console.log("There is error while uploading image");
     }
 
-    console.log(data, "This is data");
     return { success: true, data: data?.path };
   } catch (error) {
     console.log(error);
