@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginHorizontal: wp(5),
     alignItems: "center",
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   headerText: {
     fontSize: wp(6.5),

@@ -35,6 +35,8 @@ const Register = () => {
       error,
     } = await supabase.auth.signUp(result);
 
+    router.push("/(auth)/login");
+
     setLoading(false);
     if (error) Alert.alert(error.message);
     if (!session) Alert.alert("Error!", error?.message);

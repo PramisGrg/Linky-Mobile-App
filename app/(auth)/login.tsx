@@ -21,7 +21,10 @@ const Login = () => {
     setLoading(true);
     const { data, error } = await supabase.auth.signInWithPassword(values);
 
-    if (error) Alert.alert(error.message);
+    if (error) {
+      Alert.alert("Login", error.message);
+      reset();
+    }
     setLoading(false);
   };
   return (

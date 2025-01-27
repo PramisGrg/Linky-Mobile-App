@@ -106,7 +106,7 @@ const ProfileEdit = () => {
           <Text style={styles.formText}>Please fill your profile details</Text>
           <Input
             control={control}
-            placeholder={user.data.name}
+            placeholder="Wanna change name"
             name="name"
             icons={
               <Ionicons
@@ -118,7 +118,7 @@ const ProfileEdit = () => {
           />
           <Input
             control={control}
-            placeholder={user.data.phoneNumber}
+            placeholder="Enter phone number"
             name="phoneNumber"
             icons={
               <Feather name="phone-call" size={24} color={theme.colors.text} />
@@ -126,7 +126,7 @@ const ProfileEdit = () => {
           />
           <Input
             control={control}
-            placeholder={user.data.address}
+            placeholder="Enter address"
             name="address"
             icons={
               <FontAwesome6
@@ -144,9 +144,10 @@ const ProfileEdit = () => {
               <TextInput
                 style={styles.bioInput}
                 multiline={true}
-                placeholder="Enter your name"
+                placeholder="Enter your bio"
                 onBlur={onBlur}
                 onChangeText={onChange}
+                textAlignVertical="top"
                 value={value}
               />
             )}

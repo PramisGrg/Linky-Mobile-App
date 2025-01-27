@@ -33,7 +33,6 @@ const PostDetails = () => {
   const [sendLoading, setSendLoading] = useState(false);
 
   const handlePostComment = async (payload: any) => {
-    console.log("Got new comment", payload.new);
     if (payload.new) {
       const newComment = { ...payload.new };
       const response = await getUserData(newComment.userId);

@@ -16,8 +16,6 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 const Profile = () => {
   const { user } = useAuth();
 
-  console.log(user, "This is user");
-
   const onLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {

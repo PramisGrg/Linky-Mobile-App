@@ -95,6 +95,7 @@ const Post = () => {
             placeholder="What's is on your mind ? "
             multiline
             value={status}
+            textAlignVertical="top"
             onChangeText={(text: string) => setStatus(text)}
           />
         </View>
