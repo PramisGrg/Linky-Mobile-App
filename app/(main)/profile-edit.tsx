@@ -44,12 +44,20 @@ const ProfileEdit = () => {
     }
   };
 
-  const onSubmit = async (values: UpdateProfileType) => {
-    const { address, bio, name, phoneNumber } = values;
-
-    if (!name || !address || !bio || !phoneNumber) {
-      Alert.alert("Please fill the form");
+  const imageGet = () => {
+    if (imageUri) {
+      return imageUri;
+    } else if (user?.data?.image) {
+      return user.data.image;
+    } else {
+      return "No image";
     }
+  };
+
+  const onSubmit = async (values: UpdateProfileType) => {
+    // if (!name || !address || !bio || !phoneNumber) {
+    //   Alert.alert("Please fill the form");
+    // }
     setLoading(true);
     //upload image
     const imageRes = await uploadFile("profiles", imageUri, true);
@@ -89,12 +97,7 @@ const ProfileEdit = () => {
         </View>
 
         <View style={styles.profileImage}>
-          <Avatar
-            uri={user.data.image || undefined}
-            height={130}
-            width={130}
-            borderRadius={40}
-          />
+          <Avatar uri={imageGet()} height={130} width={130} borderRadius={40} />
           <Pressable onPress={pickImage}>
             <View style={styles.editIcons}>
               <AntDesign name="camerao" size={24} color="black" />

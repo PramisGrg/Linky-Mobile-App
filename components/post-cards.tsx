@@ -84,13 +84,13 @@ const PostCards = ({
               color={theme.colors.textLight}
             />
           </Pressable>
-          <Pressable>
+          {/* <Pressable>
             <AntDesign
               name="sharealt"
               size={24}
               color={theme.colors.textLight}
             />
-          </Pressable>
+          </Pressable> */}
         </View>
       )}
     </View>

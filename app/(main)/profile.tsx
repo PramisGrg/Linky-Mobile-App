@@ -16,11 +16,32 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 const Profile = () => {
   const { user } = useAuth();
 
-  const onLogout = async () => {
+  const logout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
       Alert.alert(error.message);
     }
+  };
+
+  const onLogout = async () => {
+    Alert.alert("Logout", "Are you sure you want to logout", [
+      {
+        text: "Cancel",
+        onPress: () => {
+          console.log("Modal cancelled");
+        },
+        style: "cancel",
+      },
+      {
+        text: "Ok",
+        onPress: () => logout(),
+        style: "destructive",
+      },
+    ]);
+    // const { error } = await supabase.auth.signOut();
+    // if (error) {
+    //   Alert.alert(error.message);
+    // }
   };
   return (
     <ScreenWrapper bg="white">
@@ -41,9 +62,9 @@ const Profile = () => {
               width={130}
               borderRadius={40}
             />
-            <View style={styles.editIcons}>
+            {/* <View style={styles.editIcons}>
               <AntDesign name="edit" size={24} color="gray" />
-            </View>
+            </View> */}
           </Pressable>
         </View>
 
