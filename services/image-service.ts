@@ -7,6 +7,10 @@ export const uploadFile = async (
   fileUri: string,
   isImage = true
 ) => {
+  if (!fileUri) {
+    return { success: false, msg: "No file provided" };
+  }
+
   try {
     let fileName = getFilePath(folderName, isImage);
     const fileBase64 = await FileSystem.readAsStringAsync(fileUri, {

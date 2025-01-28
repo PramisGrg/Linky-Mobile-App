@@ -99,9 +99,10 @@ const Home = () => {
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listStyles}
-        renderItem={({ item }) => (
-          <PostCards item={item} currentUser={user} router={router} />
-        )}
+        renderItem={({ item }) => {
+          console.log(item, "This is main item");
+          return <PostCards item={item} currentUser={user} router={router} />;
+        }}
         onEndReached={() => {
           getPosts();
         }}

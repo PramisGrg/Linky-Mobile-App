@@ -10,7 +10,6 @@ import { Image } from "expo-image";
 import { getSupaBaseFileUri } from "@/services/image-service";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import PostDetails from "@/app/(main)/post-details";
 
 interface PostCardsProps {
   item: GetPostsType;
@@ -40,7 +39,7 @@ const PostCards = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <Avatar
-          uri={item.user.image}
+          uri={item.user.image || ""}
           height={40}
           width={40}
           borderRadius={20}
@@ -78,11 +77,16 @@ const PostCards = ({
             />
           </Pressable>
           <Pressable onPress={openPostDetails}>
-            <FontAwesome5
-              name="comment"
-              size={24}
-              color={theme.colors.textLight}
-            />
+            <View
+              style={{ flexDirection: "row", gap: 4, alignItems: "center" }}
+            >
+              <FontAwesome5
+                name="comment"
+                size={24}
+                color={theme.colors.textLight}
+              />
+              <Text style={styles.commentCount}>{item.comments[0].count}</Text>
+            </View>
           </Pressable>
           {/* <Pressable>
             <AntDesign
@@ -127,5 +131,9 @@ const styles = StyleSheet.create({
   likeCommentShare: {
     flexDirection: "row",
     gap: 20,
+  },
+  commentCount: {
+    fontSize: 18,
+    color: theme.colors.textLight,
   },
 });

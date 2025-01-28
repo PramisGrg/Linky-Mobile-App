@@ -103,6 +103,8 @@ const PostDetails = () => {
     );
   }
 
+  console.log(posts, "This is post inside post details");
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>

@@ -50,7 +50,7 @@ export const fetchPosts = async (limit = 10) => {
       .from("posts")
       .select(
         `*, 
-       user:  users (id, email, name),
+       user:  users (id, email, name, image),
        comments(count)`
       )
       .order("created_at", { ascending: false })
@@ -73,8 +73,8 @@ export const fetchPostDetail = async (postId: number) => {
       .from("posts")
       .select(
         `*, 
-         user:  users (id, email, name),
-         comments (*, user: users(id, name, image)) `
+         user:  users (id, email, name, image),
+         comments (*, user: users(id, name)) `
       )
       .eq("id", postId)
       .order("created_at", { ascending: false })

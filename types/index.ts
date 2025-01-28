@@ -10,11 +10,9 @@ export interface RegisterType {
 }
 
 export interface UpdateProfileType {
-  name: string;
   phoneNumber: string;
   address: string;
   bio: string;
-  image?: null;
 }
 
 // export interface UserType {
@@ -27,9 +25,13 @@ export interface UpdateProfileType {
 //   phoneNumber: string;
 // }
 
+type Comment = {
+  count: number;
+};
 export interface GetPostsType {
   body: string;
   created_at: string;
+  comments: Comment[];
   file: string;
   id: number;
   user: {

@@ -55,9 +55,11 @@ const ProfileEdit = () => {
   };
 
   const onSubmit = async (values: UpdateProfileType) => {
-    // if (!name || !address || !bio || !phoneNumber) {
-    //   Alert.alert("Please fill the form");
-    // }
+    if (!values.address || !values.bio || !values.phoneNumber || !imageUri) {
+      Alert.alert("Empty field", "All fields must be filled");
+      return;
+    }
+
     setLoading(true);
     //upload image
     const imageRes = await uploadFile("profiles", imageUri, true);
@@ -67,11 +69,9 @@ const ProfileEdit = () => {
     } else {
       user.data.image = null;
     }
-
     const requiredValue = { ...values, image: user.data.image };
     const response = await updateUser(user?.data.id, requiredValue);
     setLoading(false);
-
     if (response.success) {
       //   //managing format of data
       const mergedUserData = {
@@ -84,6 +84,7 @@ const ProfileEdit = () => {
       setUserData(mergedUserData);
       router.push("/(main)/profile");
     }
+    setLoading(false);
   };
 
   return (
@@ -107,7 +108,7 @@ const ProfileEdit = () => {
 
         <View style={styles.form}>
           <Text style={styles.formText}>Please fill your profile details</Text>
-          <Input
+          {/* <Input
             control={control}
             placeholder="Wanna change name"
             name="name"
@@ -118,7 +119,7 @@ const ProfileEdit = () => {
                 color={theme.colors.text}
               />
             }
-          />
+          /> */}
           <Input
             control={control}
             placeholder="Enter phone number"
