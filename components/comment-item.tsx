@@ -5,12 +5,14 @@ import { theme } from "@/constants/theme";
 import Avatar from "./ui/avatar";
 import moment from "moment";
 import { hp } from "@/helpers/dimensions";
+import { useAuth } from "@/context/auth-context";
 
 const CommentItem = ({ item }: { item: ShowCommentType }) => {
+  const { user } = useAuth();
   const createdAt = moment(item.created_at).format("MMM DD");
   return (
     <View style={{ flexDirection: "row", gap: 10 }}>
-      <Avatar height={40} width={40} borderRadius={20} />
+      <Avatar uri={user.data.image} height={40} width={40} borderRadius={20} />
       <View style={styles.container}>
         <View style={styles.subContainer}>
           <Text style={{ fontWeight: 500, fontSize: hp(1.8) }}>

@@ -75,7 +75,7 @@ const Register = () => {
             }
             name="email"
             control={control}
-            placeholder="Enter an emai"
+            placeholder="Enter an email"
           />
           <Input
             icons={

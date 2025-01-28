@@ -28,7 +28,6 @@ const PostCards = ({
   const [like, setLike] = useState(false);
 
   const openPostDetails = () => {
-    console.log(item.id);
     router.push({
       pathname: "/post-details",
       params: { postId: item?.id },
@@ -114,7 +113,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    gap: 20,
+    gap: 8,
   },
   postName: {
     fontSize: hp(1.9),

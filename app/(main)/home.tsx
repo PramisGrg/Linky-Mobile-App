@@ -100,7 +100,6 @@ const Home = () => {
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listStyles}
         renderItem={({ item }) => {
-          console.log(item, "This is main item");
           return <PostCards item={item} currentUser={user} router={router} />;
         }}
         onEndReached={() => {
