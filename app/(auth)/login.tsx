@@ -47,7 +47,7 @@ const Login = () => {
             }
             name="email"
             control={control}
-            placeholder="Enter a emai"
+            placeholder="Enter a email"
           />
           <Input
             icons={

@@ -88,7 +88,6 @@ const PostDetails = () => {
     setSendLoading(false);
     const response = await createComment(commentData);
     if (response.success) {
-      console.log(response.data);
       setComment("");
     } else {
       Alert.alert("Error while creating comment");
@@ -102,8 +101,6 @@ const PostDetails = () => {
       </View>
     );
   }
-
-  console.log(posts, "This is post inside post details");
 
   return (
     <View style={styles.container}>
