@@ -12,7 +12,7 @@ const CommentItem = ({ item }: { item: ShowCommentType }) => {
   const createdAt = moment(item.created_at).format("MMM DD");
   return (
     <View style={{ flexDirection: "row", gap: 10 }}>
-      <Avatar uri={user.data.image} height={40} width={40} borderRadius={20} />
+      <Avatar uri={item.user.image} height={40} width={40} borderRadius={20} />
       <View style={styles.container}>
         <View style={styles.subContainer}>
           <Text style={{ fontWeight: 500, fontSize: hp(1.8) }}>

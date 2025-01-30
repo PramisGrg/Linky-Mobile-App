@@ -74,7 +74,7 @@ export const fetchPostDetail = async (postId: number) => {
       .select(
         `*, 
          user:  users (id, email, name, image),
-         comments (*, user: users(id, name)) `
+         comments (*, user: users(id, name, image)) `
       )
       .eq("id", postId)
       .order("created_at", { ascending: false })
